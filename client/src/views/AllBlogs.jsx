@@ -1,9 +1,8 @@
-import React from 'react'
 
 function AllBlogs() {
   return (
     <div>
-      
+      <h1>Blogs</h1>
     </div>
   )
 }
