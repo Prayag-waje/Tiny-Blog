@@ -14,10 +14,15 @@ const postBlog = async(req, res) => {
         title,
         category,
         content,
-        author
+        author,
+        slug: `temp-slug-${Date.now()}-${Math.random().toString()}`.replace(/[^\w-]+/g,""),
     });
 
     const saveBlog = await newBlog.save();
+
+    saveBlog.slug = `${title.toLowerCase().replace(/ /g, "-")}-${saveBlog._id}`;
+
+    await saveBlog.save();
 
     res.status(201).json({
         success: true,
