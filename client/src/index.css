@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+h1{
+    @apply text-4xl font-bold mt-8;
+}
+
+h2{
+    @apply text-3xl font-semibold mt-6;
+}

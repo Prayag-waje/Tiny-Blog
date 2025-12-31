@@ -65,7 +65,7 @@ const postLogin = async (req, res) => {
         })
     }
 
-    const existingUser = await User.findOne({email, password: md5(password)}).select("-password");
+    const existingUser = await User.findOne({email, password: md5(password)}).select("_id name email");
     if(existingUser){
         return res.json({
             success: true,
