@@ -13,8 +13,8 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path = "/" element = {<AllBlogs />}/>
         <Route path = "/new" element = {<NewBlogs />}/>
-        <Route path = "/edit/:id" element = {<EditBlogs />}/>
-        <Route path = "/blog/:id" element = {<ReadBlogs />}/>
+        <Route path = "/edit/:slug" element = {<EditBlogs />}/>
+        <Route path = "/blog/:slug" element = {<ReadBlogs />}/>
         <Route path = "/login" element = {<Login />}/>
         <Route path = "/signup" element = {<Signup />}/>
         <Route path = "*" element = {<div></div>} />

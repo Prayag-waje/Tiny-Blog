@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import "./User.js";
 
 const blogSchema = new Schema({
     title: { type: String, required: true },

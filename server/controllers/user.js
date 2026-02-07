@@ -73,7 +73,7 @@ const postLogin = async (req, res) => {
             user: existingUser,
         });
     }else{
-        return res.success(400).json({
+        return res.status(400).json({
             success: false,
             message: "Invalid email and password",
         })

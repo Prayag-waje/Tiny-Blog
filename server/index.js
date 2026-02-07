@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
+import mongoose, { get } from 'mongoose';
 import dotenv from 'dotenv';
 import { postSignup, postLogin } from './controllers/user.js';
-import { postBlog } from './controllers/blog.js';
+import { postBlog, getBlogs, getBlogsBySlug, patchPublishBlog, putBlog } from './controllers/blog.js';
 
 dotenv.config();
 
@@ -36,6 +36,11 @@ app.post("/signup", postSignup);
 app.post("/login", postLogin);
 
 app.post("/blogs", postBlog);
+app.get("/blogs", getBlogs);
+
+app.get("/blogs/:slug", getBlogsBySlug);
+app.patch("/blogs/:slug/publish", patchPublishBlog);
+app.put("/blogs/:slug", putBlog)
 
 
 
