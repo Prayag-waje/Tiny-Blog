@@ -1,9 +1,15 @@
 import Blog from "../models/Blog.js";
+import JWT from "jsonwebtoken";
 
 const postBlog = async(req, res) => {
-    const { title, category, content, author} = req.body;
+    const { title, category, content} = req.body;
+    const {authorization} = req.headers;
 
-    if(!title || !category || !content ||! author){
+    const decodedToken = JWT.verify(authorization.split(" ")[1], process.env.JWT_SECRET);
+
+    console.log(decodedToken);
+
+    if(!title || !category || !content){
         res.status(400).json({
             success: false,
             message: "All feilds are required"
@@ -14,7 +20,7 @@ const postBlog = async(req, res) => {
         title,
         category,
         content,
-        author,
+        author: decodedToken?.id,
         slug: `temp-slug-${Date.now()}-${Math.random().toString()}`.replace(/[^\w-]+/g,""),
     });
 

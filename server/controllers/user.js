@@ -1,5 +1,6 @@
 import User from './../models/User.js';
 import md5 from 'md5';
+import jwt from 'jsonwebtoken';
 
 const postSignup = async (req, res) => {
     const { name, email,  password} = req.body;
@@ -9,21 +10,21 @@ const postSignup = async (req, res) => {
     const passwordvalidationregex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
     if(namevalidationregex.test(name)===false){
-        return res.success(400).json({
+        return res.status(400).json({
             success: false,
             message: "Name should contain only letters and spaces", 
         })
     }
 
     if(emailvalidationregex.test(email)===false){
-        return res.success(400).json({
+        return res.status(400).json({
             success: false,
             message: "Email is not valid", 
         })
     }
 
     if(passwordvalidationregex.test(password)===false){
-        return res.success(400).json({
+        return res.status(400).json({
             success: false,
             message: "Password must be at least 8 characters long and contain at least one letter and one number", 
         })
@@ -67,10 +68,21 @@ const postLogin = async (req, res) => {
 
     const existingUser = await User.findOne({email, password: md5(password)}).select("_id name email");
     if(existingUser){
+        const token = jwt.sign(
+            {
+                _id: existingUser._id,
+                email: existingUser.email,
+                name: existingUser.name,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
         return res.json({
             success: true,
             message: "user logged in successfully",
             user: existingUser,
+            token,
         });
     }else{
         return res.status(400).json({
