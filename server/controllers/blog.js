@@ -3,11 +3,8 @@ import JWT from "jsonwebtoken";
 
 const postBlog = async(req, res) => {
     const { title, category, content} = req.body;
-    const {authorization} = req.headers;
 
-    const decodedToken = JWT.verify(authorization.split(" ")[1], process.env.JWT_SECRET);
-
-    console.log(decodedToken);
+    const {user} = req;
 
     if(!title || !category || !content){
         res.status(400).json({
@@ -20,7 +17,7 @@ const postBlog = async(req, res) => {
         title,
         category,
         content,
-        author: decodedToken?.id,
+        author: user?.id,
         slug: `temp-slug-${Date.now()}-${Math.random().toString()}`.replace(/[^\w-]+/g,""),
     });
 
@@ -79,6 +76,24 @@ const getBlogsBySlug = async (req, res) => {
 const patchPublishBlog = async (req, res) => {
     const {slug} = req.params;
 
+    const {user} =req;
+
+    const blog = await Blog.findOne({slug: slug});
+
+    if(!blog){
+        return res.status(404).json({
+            success: false,
+            message: "Blog not found"
+        })
+    }
+
+    if(blog.author.toString() !== user?.id){
+        return res.status(403).json({
+            success: false,
+            message: "you are not eligible to publish this blog"
+        })
+    }
+
     const updatedBlog = await Blog.findOneAndUpdate(
         {slug: slug},
         {status: "published"},
@@ -95,6 +110,24 @@ const patchPublishBlog = async (req, res) => {
 const putBlog = async (req, res) => {
     const {slug} = req.params;
     const {title, category, content} = req.body;
+
+    const {user} = req;
+
+    const existingBlog = await Blog.findOne({slug: slug});
+
+    if (!existingBlog){
+        return res.status(404).json({
+            success: false,
+            message:"Blog not found"
+        })
+    }
+
+    if(existingBlog.author.toString() !== user?.id){
+        return res.status(403).json({
+            success: false,
+            message: "you are not eligible to change this blog "
+        })
+    }
 
     if(!title || !category || !content){
         return res.status(400).json({

@@ -4,6 +4,7 @@ import mongoose, { get } from 'mongoose';
 import dotenv from 'dotenv';
 import { postSignup, postLogin } from './controllers/user.js';
 import { postBlog, getBlogs, getBlogsBySlug, patchPublishBlog, putBlog } from './controllers/blog.js';
+import Jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -31,6 +32,25 @@ app.get('/health', (req, res) => {
         message: "Server is running",
     })
 })
+
+const JwtCheck = (req, res, next) => {
+    req.user = null;
+    const {autthorization} = req.header;
+    if(!autthorization){
+        return res.status(400).json({ message: "Authorization token missing"});
+    }
+
+    try{
+        const token = autthorization.split(" ")[1];
+        const decoded = Jwt.verify(token, process.env.JWT_SECRET);  
+        console.log("Decoded JWT:", decoded);
+        req.user = decoded; 
+
+        next();
+    }catch(error){
+        return res.status(401).json({ message: "Invalid token"})
+    }
+}
 
 app.post("/signup", postSignup);
 app.post("/login", postLogin);
