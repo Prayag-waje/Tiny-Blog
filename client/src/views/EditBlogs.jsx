@@ -31,28 +31,46 @@ function EditBlogs() {
   }, [])
   
   const updateBlog = async() => {
-    const response = await axios.put(`${import.meta.env.VITE_API_URL}/blogs/${slug}`,{
+    try{
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/blogs/${slug}`,{
       title,
       category,
       content,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     });
 
     if(response.data.success){
-      tost.success("Blog created successfully");
+      tost.success("Blog updated successfully");
       setTimeout(() => {
-        window.location.herf = '/';
+        window.location.href = '/';
       }, 2000)
     }
+    } catch(error){
+      tost.error(error?.response?.data?.message || "Something went wrong");
+    }   
   }
 
   const publishBlog = async() => {
-    const response = await axios.patch(`${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`);
+    try{
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
 
     if(response.data.success){
       tost.success("Blog published successfully");
       setTimeout(() => {
         window.location.href = '/';
       }, 2000);
+    }
+    } catch(error){
+      tost.error(error?.response?.data?.message || "Something went wrong");
     }
   }
 

@@ -17,12 +17,18 @@ function NewBlogs() {
   }, [])
   
   const saveBlog = async() => {
+    try{
     const response = await axios.post(`${import.meta.env.VITE_API_URL}/blogs`,{
       title,
       category,
       content,
       author: user?._id
-    });
+    },
+  {
+    headers:{
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
 
     if(response.data.success){
       tost.success("Blog created successfully");
@@ -30,6 +36,9 @@ function NewBlogs() {
         window.location.herf = '/';
       }, 2000)
       
+    }
+    } catch(error){
+      tost.error(error?.response?.data?.message || "Something went wrong");
     }
   }
 
