@@ -28,20 +28,20 @@ const connectDB = async () => {
 
 app.get('/health', (req, res) => {
     res.json({
-        succes: true,
+        success: true,
         message: "Server is running",
     })
 })
 
 const JwtCheck = (req, res, next) => {
     req.user = null;
-    const {autthorization} = req.header;
-    if(!autthorization){
+    const {authorization} = req.headers;
+    if(!authorization){
         return res.status(400).json({ message: "Authorization token missing"});
     }
 
     try{
-        const token = autthorization.split(" ")[1];
+        const token = authorization.split(" ")[1];
         const decoded = Jwt.verify(token, process.env.JWT_SECRET);  
         console.log("Decoded JWT:", decoded);
         req.user = decoded; 
@@ -55,12 +55,12 @@ const JwtCheck = (req, res, next) => {
 app.post("/signup", postSignup);
 app.post("/login", postLogin);
 
-app.post("/blogs", postBlog);
+app.post("/blogs", JwtCheck, postBlog);
 app.get("/blogs", getBlogs);
 
 app.get("/blogs/:slug", getBlogsBySlug);
-app.patch("/blogs/:slug/publish", patchPublishBlog);
-app.put("/blogs/:slug", putBlog)
+app.patch("/blogs/:slug/publish", JwtCheck, patchPublishBlog);
+app.put("/blogs/:slug", JwtCheck, putBlog)
 
 
 

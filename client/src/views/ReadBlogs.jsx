@@ -2,6 +2,7 @@ import { useState, useEffect, use } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios";
 import MarkdownEditor from "@uiw/react-markdown-editor";
+import Navbar from "../components/Navbar";
 
 function ReadBlogs() {
   const {slug} = useParams();
@@ -19,6 +20,7 @@ function ReadBlogs() {
 
   return (
     <div className="container mx-auto p-4 ">
+      <Navbar />
       <h2 className="text-2xl mb-2">{blog.title}</h2>
       <p>{blog.publishedAt || blog.createdAt}</p>
       <div className='flex items-center gap-4 my-2'>

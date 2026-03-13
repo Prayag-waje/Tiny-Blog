@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import axios from 'axios'
+import { Toaster } from 'react-hot-toast'
 
 function Login() {
   const [user, setUser] = useState({
@@ -15,7 +16,7 @@ function Login() {
       user,
     );
     if(response?.data?.success){
-      localStorage.setItem("loginInUser", JSON.stringify(response.data.user));
+      localStorage.setItem("loggedInUser", JSON.stringify(response.data.user));
       localStorage.setItem("token", response.data.token)
 
       window.location.href="/";
@@ -54,6 +55,7 @@ function Login() {
           {""}
           <Link to="/Signup" className="text-blue-500">SignUp</Link>
         </p>
+        <Toaster />
       </div>
 
     </div>

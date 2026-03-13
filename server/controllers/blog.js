@@ -2,7 +2,7 @@ import Blog from "../models/Blog.js";
 import JWT from "jsonwebtoken";
 
 const postBlog = async(req, res) => {
-    const { title, category, content} = req.body;
+    const { title, category, content} = req.body || {};
 
     const {user} = req;
 
@@ -17,7 +17,7 @@ const postBlog = async(req, res) => {
         title,
         category,
         content,
-        author: user?.id,
+        author: user?._id,
         slug: `temp-slug-${Date.now()}-${Math.random().toString()}`.replace(/[^\w-]+/g,""),
     });
 
@@ -87,7 +87,7 @@ const patchPublishBlog = async (req, res) => {
         })
     }
 
-    if(blog.author.toString() !== user?.id){
+    if(blog.author.toString() !== user?._id){
         return res.status(403).json({
             success: false,
             message: "you are not eligible to publish this blog"
@@ -109,7 +109,7 @@ const patchPublishBlog = async (req, res) => {
 
 const putBlog = async (req, res) => {
     const {slug} = req.params;
-    const {title, category, content} = req.body;
+    const {title, category, content} = req.body || {};
 
     const {user} = req;
 
@@ -122,7 +122,7 @@ const putBlog = async (req, res) => {
         })
     }
 
-    if(existingBlog.author.toString() !== user?.id){
+    if(existingBlog.author.toString() !== user?._id){
         return res.status(403).json({
             success: false,
             message: "you are not eligible to change this blog "
@@ -141,7 +141,8 @@ const putBlog = async (req, res) => {
         {
             title,
             category,
-            content
+            content,
+            author: existingBlog.author
         },
         {new: true}
     );

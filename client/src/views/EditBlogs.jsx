@@ -5,6 +5,7 @@ import {BLOG_CATEGORIES} from './../constants';
 import {getCurrentUser} from '../util';
 import tost, {Toaster} from 'react-hot-toast';
 import axios from 'axios';
+import Navbar from '../components/Navbar.jsx';
 function EditBlogs() {
   
   const [content, setContent] = useState('')
@@ -56,7 +57,7 @@ function EditBlogs() {
 
   const publishBlog = async() => {
     try{
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`,
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`, {},
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -76,6 +77,7 @@ function EditBlogs() {
 
   return (
     <div className='mx-auto p-4 container'>
+      <Navbar />
       <h1>New Blogs</h1>
 
       <input 

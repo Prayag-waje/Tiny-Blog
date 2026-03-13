@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getCurrentUser } from '../util';
 import BlogCard from '../components/BlogCard.jsx';
 import axios from 'axios';
+import Navbar from '../components/Navbar.jsx';
 
 function AllBlogs() {
   const [user, setUser] = useState(null);
@@ -22,8 +23,7 @@ function AllBlogs() {
 
   return (
     <div>
-      <h1>All Blogs</h1>
-      {user ? `Hello, ${user.name}!` : 'Hello, Guest!'}
+      <Navbar />
       <div className=' container mx-auto p-6'>
         {blogs.map((blog) => {
           const {
