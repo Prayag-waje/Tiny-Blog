@@ -2,12 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import mongoose, { get } from 'mongoose';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 import { postSignup, postLogin } from './controllers/user.js';
 import { postBlog, getBlogs, getBlogsBySlug, patchPublishBlog, putBlog } from './controllers/blog.js';
 import Jwt from 'jsonwebtoken';
 import Blog from './models/Blog.js';
 
-dotenv.config({ path: '../.env' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: resolve(__dirname, '../.env') });
 
 const app =express();
 
