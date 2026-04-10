@@ -22,7 +22,7 @@ function ReadBlogs() {
     <div className="container mx-auto p-4 ">
       <Navbar />
       <h2 className="text-2xl mb-2">{blog.title}</h2>
-      <p>{blog.publishedAt || blog.createdAt}</p>
+      <p>{blog.publishedAt || blog.createdAt} , Read By : {blog.viewcount} people</p>
       <div className='flex items-center gap-4 my-2'>
         <span className="text-lg font-semibold bg-orange-400 px-4 py-1 rounded-full text-white">{blog.category}</span>
 

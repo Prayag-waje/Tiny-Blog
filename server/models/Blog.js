@@ -1,5 +1,4 @@
 import { model, Schema } from "mongoose";
-import "./User.js";
 
 const blogSchema = new Schema({
     title: { type: String, required: true },
@@ -12,7 +11,8 @@ const blogSchema = new Schema({
     category: { type: String, required: true },
     publishedAt: { type: Date },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    slug: { type: String, required: true, unique: true }
+    slug: { type: String, required: true, unique: true },
+    viewcount: {type: Number, default: 0 }
 },
 {
     timestamps: true

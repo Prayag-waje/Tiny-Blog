@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom'
 
 function BlogCard({
-     title, content, author, createdAt, updatedAt, status, category, slug,
+     title, content, author, createdAt, updatedAt, status, category, slug, viewcount,
 }) {
   return (
     <div className='border px-4 py-1 my-4 rounded relative shadow-md'>
@@ -15,7 +15,11 @@ function BlogCard({
             <p>{author.email}</p>
           </div>
         </div>
-      <p className='text-sm mt-2'>Published On: {new Date(createdAt).toLocaleDateString()}</p>
+      <p className='text-sm mt-2'>
+        Published On: {new Date(createdAt || updatedAt).toLocaleDateString()} ,
+        Read By : {viewcount} people
+      </p>
+
       <span className='absolute top-1 right-1 bg-gray-200 px-2 py-1 rounded text-xs font-semibold'>{category}</span>
 
       {status === "draft" && (

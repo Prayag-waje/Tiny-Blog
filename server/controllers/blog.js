@@ -7,7 +7,7 @@ const postBlog = async(req, res) => {
     const {user} = req;
 
     if(!title || !category || !content){
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: "All feilds are required"
         })

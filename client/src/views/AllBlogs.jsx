@@ -27,7 +27,7 @@ function AllBlogs() {
       <div className=' container mx-auto p-6'>
         {blogs.map((blog) => {
           const {
-            _id, title, content, author, createdAt, updatedAt, status, category, slug
+            _id, title, content, author, createdAt, updatedAt, status, category, slug, viewcount
           } = blog;
           return (
             <BlogCard
@@ -40,6 +40,7 @@ function AllBlogs() {
               status={status}
               category={category}
               slug={slug}
+              viewcount={viewcount}
             />
             
           )

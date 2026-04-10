@@ -2,11 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import mongoose, { get } from 'mongoose';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { postSignup, postLogin } from './controllers/user.js';
 import { postBlog, getBlogs, getBlogsBySlug, patchPublishBlog, putBlog } from './controllers/blog.js';
 import Jwt from 'jsonwebtoken';
+import Blog from './models/Blog.js';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app =express();
 
@@ -16,6 +22,7 @@ app.use(cors());
 const requestCount = 0;
 
 const connectDB = async () => {
+    console.log('MONGODB_URI:', process.env.MONGODB_URI);
     try{
         const conn = await mongoose.connect(process.env.MONGODB_URI)
         if(conn){
@@ -52,13 +59,28 @@ const JwtCheck = (req, res, next) => {
     }
 }
 
+const viewCountMiddleware = async(req, res, next) => {
+    const {slug} = req.params;
+    try{
+        const blog = await Blog.findOne({slug});
+        if(blog){
+            blog.viewcount += 1;
+            await blog.save();
+        }
+
+    } catch(error){
+        console.error(" Error updating view count:", error);
+    }
+    next();
+}
+
 app.post("/signup", postSignup);
 app.post("/login", postLogin);
 
 app.post("/blogs", JwtCheck, postBlog);
 app.get("/blogs", getBlogs);
 
-app.get("/blogs/:slug", getBlogsBySlug);
+app.get("/blogs/:slug", viewCountMiddleware, getBlogsBySlug);
 app.patch("/blogs/:slug/publish", JwtCheck, patchPublishBlog);
 app.put("/blogs/:slug", JwtCheck, putBlog)
 
